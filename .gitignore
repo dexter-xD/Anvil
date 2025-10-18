@@ -1,0 +1,10 @@
+build/
+anvil
+*.exe
+*.out
+*.o
+CMakeCache.txt
+CMakeFiles/
+Makefile
+example/build/
+example/anvil
