@@ -5,6 +5,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <dirent.h>
+#include <errno.h>
+#include <ctype.h>
 
 #define MAX_LINE 512
 #define MAX_SOURCES 256

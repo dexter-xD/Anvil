@@ -119,5 +119,4 @@ void generate_makefile(BuildConfig *cfg) {
     fprintf(f, ".PHONY: all clean run\n");
 
     fclose(f);
-    printf("Generated build/Makefile successfully!\n");
 }

@@ -1,5 +1,4 @@
 #include "anvil.h"
-#include <ctype.h>
 
 void trim(char *str) {
     char *end;

@@ -1,9 +1,4 @@
 #include "anvil.h"
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <dirent.h>
-#include <errno.h>
 
 int is_c_file(const char *filename) {
     size_t len = strlen(filename);
