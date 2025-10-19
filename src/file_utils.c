@@ -10,6 +10,19 @@ int is_c_file(const char *filename) {
     return len > 2 && strcmp(filename + len - 2, ".c") == 0;
 }
 
+int is_header_file(const char *filename) {
+    size_t len = strlen(filename);
+    return len > 2 && strcmp(filename + len - 2, ".h") == 0;
+}
+
+time_t get_mtime(const char *path) {
+    struct stat st;
+    if(stat(path, &st) == 0) {
+        return st.st_mtime;
+    }
+    return 0;
+}
+
 void expand_glob(const char *pattern, char dest[][128], int *count, int max) {
     char path[256], wildcard[128];
     strcpy(path, pattern);

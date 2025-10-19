@@ -14,6 +14,7 @@ set(SOURCES
     src/file_utils.c
     src/makefile_generator.c
     src/string_utils.c
+    src/watch_system.c
 )
 
 add_executable(anvil ${SOURCES})

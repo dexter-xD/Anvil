@@ -26,6 +26,9 @@ A simple, CMake-like build system for C projects written in C. It provides a min
 - **Automatic dependency tracking** - Smart rebuild system
 - **Built-in targets** - `run` and `clean` targets included
 - **CMake integration** - Modern build system with optional features
+- **File watching** - Auto-rebuild on source/header file changes (`-w` flag)
+- **Watch & Run mode** - Auto-rebuild and run on changes (`-wr` flag)
+- **Smart monitoring** - Watches both source files and header files in include directories
 
 ## 🚀 Quick Start
 
@@ -40,8 +43,12 @@ cmake .. && make
 
 ```bash
 cd example
-./anvil build.conf
-cd build && make run
+./anvil build.conf          # Generate Makefile
+cd build && make run        # Build and run
+
+# Or use watch mode for development:
+./anvil -w build.conf       # Auto-rebuild on file changes
+./anvil -wr build.conf      # Auto-rebuild and run on file changes
 ```
 
 ### 3. Create Your Own Project
@@ -80,7 +87,8 @@ Anvil/
 │   ├── config_parser.c    # Configuration file parser
 │   ├── file_utils.c       # File and directory utilities
 │   ├── makefile_generator.c # Makefile generation
-│   └── string_utils.c     # String manipulation utilities
+│   ├── string_utils.c     # String manipulation utilities
+│   └── watch_system.c     # File watching and auto-build system
 └── example/               # Example project
     ├── build.conf         # Build configuration
     ├── src/               # Example source files
@@ -142,6 +150,26 @@ project/
     └── Makefile
 ```
 
+## � EWatch Mode Features
+
+Anvil includes powerful file watching capabilities for seamless development:
+
+```bash
+# Basic usage
+./anvil build.conf          # Generate Makefile once
+
+# Watch mode - auto-rebuild on file changes
+./anvil -w build.conf       # Watches source and header files
+
+# Watch & Run mode - auto-rebuild and run on changes  
+./anvil -wr build.conf      # Perfect for development workflow
+```
+
+**What gets watched:**
+- All source files (`.c` files)
+- All header files (`.h` files) in include directories
+- Recursive monitoring of include subdirectories
+
 ## 💡 Example Usage
 
 ```properties
@@ -156,6 +184,11 @@ output_dir = bin
 ```
 
 ```bash
+# Development workflow
+./anvil -wr build.conf      # Start watch & run mode
+# Edit your code, save, and see instant results!
+
+# Or traditional workflow
 ./anvil build.conf
 cd build && make run
 ```
@@ -168,7 +201,8 @@ The project is organized into modular components:
 - **file_utils.c**: File operations and glob expansion  
 - **makefile_generator.c**: Generates Makefiles
 - **string_utils.c**: String manipulation utilities
-- **main.c**: Main program logic
+- **watch_system.c**: File watching, auto-build, and run functionality
+- **main.c**: Main program logic and command-line interface
 
 ## 📄 License
 
