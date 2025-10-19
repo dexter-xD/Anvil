@@ -1,0 +1,11 @@
+#ifndef VERSION_H
+#define VERSION_H
+
+#define ANVIL_VERSION_MAJOR 1
+#define ANVIL_VERSION_MINOR 0
+#define ANVIL_VERSION_PATCH 0
+#define ANVIL_VERSION_STRING "1.0.0-beta"
+#define ANVIL_BUILD_DATE __DATE__
+#define ANVIL_BUILD_TIME __TIME__
+
+#endif

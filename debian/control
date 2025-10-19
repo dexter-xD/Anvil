@@ -1,0 +1,20 @@
+Source: anvil
+Section: devel
+Priority: optional
+Maintainer: Dexter <dexter@example.com>
+Build-Depends: debhelper (>= 10), build-essential, cmake
+Standards-Version: 4.1.2
+Homepage: https://github.com/dexter/anvil
+
+Package: anvil
+Architecture: amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}, build-essential
+Description: Fast C build system with watch mode
+ Anvil is a lightweight, fast build system for C projects that generates
+ Makefiles from simple configuration files. Features include:
+ .
+  * Simple configuration syntax
+  * Automatic source file discovery with wildcards
+  * Watch mode for automatic rebuilds
+  * Colored output for better readability
+  * Cross-platform support

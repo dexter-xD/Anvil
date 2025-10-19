@@ -29,3 +29,45 @@ endif()
 
 
 install(TARGETS anvil DESTINATION bin)
+
+# Install documentation
+install(FILES README.md DESTINATION share/doc/anvil)
+install(FILES LICENSE DESTINATION share/doc/anvil)
+
+# CPack configuration for Debian package
+set(CPACK_GENERATOR "DEB")
+
+# Allow overriding package name and version
+if(NOT DEFINED PACKAGE_NAME)
+    set(PACKAGE_NAME "anvil")
+endif()
+if(NOT DEFINED PACKAGE_VERSION)
+    set(PACKAGE_VERSION "1.0.0")
+endif()
+
+set(CPACK_PACKAGE_NAME "${PACKAGE_NAME}")
+set(CPACK_PACKAGE_VERSION "${PACKAGE_VERSION}")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Fast C build system with watch mode")
+set(CPACK_PACKAGE_DESCRIPTION "Anvil is a lightweight, fast build system for C projects that generates
+Makefiles from simple configuration files. Features include:
+ * Simple configuration syntax
+ * Automatic source file discovery with wildcards  
+ * Watch mode for automatic rebuilds
+ * Colored output for better readability
+ * Cross-platform support")
+
+set(CPACK_PACKAGE_CONTACT "Dexter <dexter@example.com>")
+set(CPACK_PACKAGE_VENDOR "Dexter")
+set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/dexter/anvil")
+
+# Debian specific settings
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Dexter <dexter@example.com>")
+set(CPACK_DEBIAN_PACKAGE_SECTION "devel")
+set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "build-essential")
+set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
+
+# Package file name
+set(CPACK_PACKAGE_FILE_NAME "${PACKAGE_NAME}_${PACKAGE_VERSION}_amd64")
+
+include(CPack)

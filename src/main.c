@@ -1,5 +1,10 @@
 #include "anvil.h"
 #include "colors.h"
+#include "version.h"
+
+void show_version() {
+    printf(BRIGHT_CYAN "Anvil " BOLD "v%s" RESET "\n", ANVIL_VERSION_STRING);
+}
 
 void show_config_content(const char *filename) {
     FILE *f = fopen(filename, "r");
@@ -66,8 +71,9 @@ int main(int argc, char *argv[]) {
     char *config_file = NULL;
 
     if(argc < 2) {
-        printf("Usage: %s [-w|-wr] <buildfile>\n", argv[0]);
+        printf("Usage: %s [-v|-w|-wr] <buildfile>\n", argv[0]);
         printf("\nOptions:\n");
+        printf("  -v     Show version information\n");
         printf("  -w     Watch mode (auto-rebuild on file changes)\n");
         printf("  -wr    Watch & Run mode (auto-rebuild and run on file changes)\n");
         printf("\nExample buildfile format:\n");
@@ -82,7 +88,10 @@ int main(int argc, char *argv[]) {
     }
 
     for(int i = 1; i < argc; i++) {
-        if(strcmp(argv[i], "-w") == 0) {
+        if(strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
+            show_version();
+            return 0;  // just show version and exit
+        } else if(strcmp(argv[i], "-w") == 0) {
             watch = 1;
         } else if(strcmp(argv[i], "-wr") == 0) {
             watch = 1;
