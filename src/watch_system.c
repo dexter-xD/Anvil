@@ -66,19 +66,19 @@ void print_timestamp(void) {
 int run_make(int run_after_build) {
     printf("\n");
     print_timestamp();
-    printf(BRIGHT_YELLOW "🔨 Building..." RESET "\n\n");
+    printf(BRIGHT_YELLOW "Building..." RESET "\n\n");
 
     int result = system("cd build && make 2>&1");
 
     if(result == 0) {
         printf("\n");
         print_timestamp();
-        printf(BRIGHT_GREEN "✅ Build successful!" RESET "\n");
+        printf(BRIGHT_GREEN "Build successful!" RESET "\n");
 
         if(run_after_build) {
             printf("\n");
             print_timestamp();
-            printf(BRIGHT_MAGENTA "🚀 Running..." RESET "\n");
+            printf(BRIGHT_MAGENTA "Running..." RESET "\n");
             printf(DIM "────────────────────────────────────────" RESET "\n");
 
             system("cd build && make run 2>&1");
@@ -90,7 +90,7 @@ int run_make(int run_after_build) {
     } else {
         printf("\n");
         print_timestamp();
-        printf(BRIGHT_RED "❌ Build failed!" RESET "\n");
+        printf(BRIGHT_RED "Build failed!" RESET "\n");
     }
 
     return result;
