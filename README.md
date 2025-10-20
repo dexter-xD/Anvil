@@ -171,5 +171,3 @@ sudo apt remove anvil  # or sudo rm /usr/bin/anvil
 MIT License - see LICENSE file.
 
 ---
-
-*Simple builds for C projects* 🔨
