@@ -27,8 +27,26 @@ sudo dpkg -i anvil_1.1.0_amd64.deb
 ```bash
 git clone https://github.com/dexter-xd/anvil.git
 cd anvil && mkdir build && cd build
-cmake .. && make && sudo make install
+cmake -DCMAKE_BUILD_TYPE=Release -DCOPY_TO_EXAMPLE=OFF ..
+
+make && sudo make install
 ```
+
+## Build Configuration
+
+When building Anvil from source, you can control the build behavior:
+
+```bash
+# Default behavior - copies anvil binary to example/ for testing
+cmake -DCMAKE_BUILD_TYPE=Release ..
+
+# Production build - no copy to example folder
+cmake -DCMAKE_BUILD_TYPE=Release -DCOPY_TO_EXAMPLE=OFF ..
+```
+
+**Options:**
+- `COPY_TO_EXAMPLE=ON` (default) - Copies built binary to `example/anvil` for testing
+- `COPY_TO_EXAMPLE=OFF` - Clean build without example copy
 
 ## 🚀 Quick Start
 
