@@ -56,8 +56,8 @@ cd build && make run
 anvil [-v|-w|-wr] <buildfile>
 
   -v     Show version
-  -w     Watch mode (auto-rebuild)
-  -wr    Watch & run mode
+  -w     Watch mode (auto-rebuild) (supported for both multiple targets and single target)
+  -wr    Watch & run mode (only for single target)
 ```
 
 ## ⚙️ Configuration
@@ -100,7 +100,10 @@ ldflags = -lncurses
 ## 💡 Development Workflow
 
 ```bash
-# Start watch & run mode
+# Start watch (supported for both multiple targets and single target)
+anvil -w build.conf
+
+# Start watch & run mode (for single target)
 anvil -wr build.conf
 
 # Edit code, save, see results instantly!
