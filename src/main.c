@@ -121,22 +121,13 @@ int main(int argc, char *argv[]) {
 
     if(watch) {
         watch_mode(&cfg, run_after_build);
-    } else {
+    } 
+    else {
         printf("\n" BRIGHT_YELLOW "To build your project:" RESET "\n");
         printf("  " CYAN "cd build" RESET "\n");
         printf("  " CYAN "make" RESET "           " DIM "# compile" RESET "\n");
         printf("  " CYAN "make run" RESET "       " DIM "# compile and run" RESET "\n");
         printf("  " CYAN "make clean" RESET "     " DIM "# clean build artifacts" RESET "\n");
-
-        if(strcmp(cfg.output_dir, ".") == 0) {
-            printf("\n" BRIGHT_BLUE "Executable will be in: " BOLD "build/%s" RESET "\n", cfg.target_name);
-        } else {
-            printf("\n" BRIGHT_BLUE "Executable will be in: " BOLD "build/%s/%s" RESET "\n", cfg.output_dir, cfg.target_name);
-        }
-
-        printf("\n" BRIGHT_CYAN "💡 Tips:" RESET "\n");
-        printf("  • Use " MAGENTA "'./anvil -w %s'" RESET " for auto-rebuild\n", config_file);
-        printf("  • Use " MAGENTA "'./anvil -wr %s'" RESET " for auto-rebuild and run\n", config_file);
     }
 
     return 0;

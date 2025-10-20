@@ -78,9 +78,9 @@ int create_directory(const char *path) {
             fprintf(stderr, "Error: Cannot create directory %s\n", path);
             return 0;
         }
-        printf("Created directory: %s\n", path);
+        // printf("Created directory: %s\n", path);
     } else {
-        printf("Directory exists: %s\n", path);
+        // printf("Directory exists: %s\n", path);
     }
     return 1;
 }

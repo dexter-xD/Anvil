@@ -62,6 +62,7 @@ anvil [-v|-w|-wr] <buildfile>
 
 ## ⚙️ Configuration
 
+### Single Target (Legacy)
 | Option | Description | Example |
 |--------|-------------|---------|
 | `project` | Project name | `project = MyApp` |
@@ -71,6 +72,30 @@ anvil [-v|-w|-wr] <buildfile>
 | `cflags` | Compiler flags | `cflags = -Wall -O2` |
 | `ldflags` | Linker flags | `ldflags = -lm` |
 | `output_dir` | Output directory | `output_dir = bin` |
+
+### Multi-Target Configuration
+```conf
+project = WebApp
+includes = include
+cflags = -Wall -O2
+output_dir = bin
+
+[target:server]
+sources = src/server.c src/common.c
+ldflags = -lpthread
+[/target]
+
+[target:client]
+sources = src/client.c src/common.c
+ldflags = -lncurses
+[/target]
+```
+
+**Multi-target commands:**
+- `make all` - Build all targets
+- `make server` - Build specific target
+- `make run-server` - Run specific target
+- `make clean` - Clean all targets
 
 ## 💡 Development Workflow
 
@@ -83,6 +108,7 @@ anvil -wr build.conf
 
 ## 📁 Example Structure
 
+### Single Target
 ```
 my-project/
 ├── build.conf
@@ -93,6 +119,23 @@ my-project/
 │   └── utils.h
 └── build/          # Generated
     ├── myapp
+    └── Makefile
+```
+
+### Multi-Target
+```
+web-project/
+├── multi-target.conf
+├── src/
+│   ├── server.c
+│   ├── client.c
+│   └── common.c
+├── include/
+│   └── common.h
+└── build/          # Generated
+    ├── bin/
+    │   ├── server
+    │   └── client
     └── Makefile
 ```
 

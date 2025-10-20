@@ -19,16 +19,26 @@
 #define MAX_WATCH_FILES 512
 
 typedef struct {
-    char project_name[128];
-    char target_name[128];
+    char name[128];
     char sources[MAX_SOURCES][128];
     int source_count;
+    char ldflags[MAX_FLAGS][128];
+    int ldflag_count;
+} Target;
+
+typedef struct {
+    char project_name[128];
+    char target_name[128];  // Keep for backward compatibility
+    char sources[MAX_SOURCES][128];  // Keep for backward compatibility
+    int source_count;  // Keep for backward compatibility
+    Target targets[16];  // Support up to 16 targets
+    int target_count;
     char includes[MAX_INCLUDES][128];
     int include_count;
     char cflags[MAX_FLAGS][128];
     int cflag_count;
-    char ldflags[MAX_FLAGS][128];
-    int ldflag_count;
+    char ldflags[MAX_FLAGS][128];  // Keep for backward compatibility
+    int ldflag_count;  // Keep for backward compatibility
     char output_dir[128];
 } BuildConfig;
 

@@ -35,8 +35,17 @@ void scan_directory_for_headers(const char *dir, WatchFile *watch_files, int *wa
 void setup_watch_list(BuildConfig *cfg, WatchFile *watch_files, int *watch_count) {
     *watch_count = 0;
 
-    for(int i = 0; i < cfg->source_count; i++) {
-        add_watch_file(cfg->sources[i], watch_files, watch_count);
+    /* watch sources from all targets (multi-target support) */
+    if(cfg->target_count > 0) {
+        for(int t = 0; t < cfg->target_count; t++) {
+            for(int i = 0; i < cfg->targets[t].source_count; i++) {
+                add_watch_file(cfg->targets[t].sources[i], watch_files, watch_count);
+            }
+        }
+    } else {
+        for(int i = 0; i < cfg->source_count; i++) {
+            add_watch_file(cfg->sources[i], watch_files, watch_count);
+        }
     }
 
     for(int i = 0; i < cfg->include_count; i++) {
@@ -102,9 +111,9 @@ void watch_mode(BuildConfig *cfg, int run_after_build) {
 
     printf("\n" BRIGHT_YELLOW "╔════════════════════════════════════════╗" RESET "\n");
     if(run_after_build) {
-        printf(BRIGHT_YELLOW "║" RESET "   " BRIGHT_RED "🔥" RESET " " BOLD "Anvil Watch & Run Mode Active" RESET " " BRIGHT_RED "🔥" RESET "  " BRIGHT_YELLOW "║" RESET "\n");
+        printf(BRIGHT_YELLOW "║" RESET "   " RESET " " BOLD "Anvil Watch & Run Mode Active" RESET " " RESET "  "  BRIGHT_YELLOW "    ║" RESET "\n");
     } else {
-        printf(BRIGHT_YELLOW "║" RESET "     " BRIGHT_RED "🔥" RESET " " BOLD "Anvil Watch Mode Active" RESET " " BRIGHT_RED "🔥" RESET "      " BRIGHT_YELLOW "║" RESET "\n");
+        printf(BRIGHT_YELLOW "║" RESET "     "  RESET " " BOLD "Anvil Watch Mode Active" RESET " " RESET "      "  BRIGHT_YELLOW "    ║" RESET "\n");
     }
     printf(BRIGHT_YELLOW "╚════════════════════════════════════════╝" RESET "\n");
 
