@@ -1,3 +1,13 @@
+anvil (1.1.0) unstable; urgency=medium
+
+  * Fixed multi-target watch mode support
+  * Fixed string trimming bug causing spaces in variable names
+  * Improved watch system to monitor all target sources
+  * Added CMake build configuration options
+  * Enhanced multi-target Makefile generation
+
+ -- Dexter <dexter@example.com>  Mon, 21 Oct 2025 12:00:00 +0000
+
 anvil (1.0.0) unstable; urgency=medium
 
   * Initial release of Anvil build system

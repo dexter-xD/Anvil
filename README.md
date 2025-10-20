@@ -19,8 +19,8 @@ A simple, CMake-like build system for C projects written in C. Features include 
 
 ### Debian/Ubuntu
 ```bash
-wget https://github.com/dexter-xd/anvil/releases/download/beta_1.0.0/anvil_1.0.0_amd64.deb
-sudo dpkg -i anvil_1.0.0_amd64.deb
+wget https://github.com/dexter-xd/anvil/releases/download/beta_1.1.0/anvil_1.1.0_amd64.deb
+sudo dpkg -i anvil_1.1.0_amd64.deb
 ```
 
 ### From Source
