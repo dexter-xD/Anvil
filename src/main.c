@@ -74,13 +74,14 @@ int main(int argc, char *argv[]) {
     char *config_file = NULL;
 
     if(argc < 2) {
-        printf("Usage: %s [-v|-w|-wr|-u] <buildfile>\n", argv[0]);
+        printf("Usage: %s [-v|-w|-wr|-u|-c] <buildfile>\n", argv[0]);
         printf("\nOptions:\n");
         printf("  -v          Show version information\n");
         printf("  -w          Watch mode (auto-rebuild on file changes)\n");
         printf("  -wr         Watch & Run mode (auto-rebuild and run on file changes)\n");
         printf("  -u          Update to latest version\n");
         printf("  -u <ver>    Update to specific version (e.g., -u 1.1.0)\n");
+        printf("  -c          Create new project template\n");
         printf("\nExample buildfile format:\n");
         printf("  project = MyProject\n");
         printf("  version = 1.0.0\n");
@@ -109,6 +110,8 @@ int main(int argc, char *argv[]) {
                 printf(BRIGHT_CYAN "Updating to latest version..." RESET "\n");
                 return update_to_latest() ? 0 : 1;
             }
+        } else if(strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--create") == 0) {
+            return create_project_template() ? 0 : 1;
         } else if(strcmp(argv[i], "-w") == 0) {
             watch = 1;
         } else if(strcmp(argv[i], "-wr") == 0) {

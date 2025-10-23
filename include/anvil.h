@@ -78,4 +78,7 @@ void watch_mode(BuildConfig *cfg, int run_after_build);
 int update_to_latest(void);
 int update_to_version(const char *target_version);
 
+/* template system */
+int create_project_template(void);
+
 #endif

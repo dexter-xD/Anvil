@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(Anvil VERSION 1.1.2 LANGUAGES C)
+project(Anvil VERSION 1.2.0 LANGUAGES C)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -16,6 +16,7 @@ set(SOURCES
     src/string_utils.c
     src/watch_system.c
     src/updater.c
+    src/template_generator.c
 )
 
 # Find required packages
@@ -53,7 +54,7 @@ if(NOT DEFINED PACKAGE_NAME)
     set(PACKAGE_NAME "anvil")
 endif()
 if(NOT DEFINED PACKAGE_VERSION)
-    set(PACKAGE_VERSION "1.1.2")
+    set(PACKAGE_VERSION "1.2.0")
 endif()
 
 set(CPACK_PACKAGE_NAME "${PACKAGE_NAME}")

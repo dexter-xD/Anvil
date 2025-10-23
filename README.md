@@ -19,8 +19,8 @@ A simple, CMake-like build system for C projects written in C. Features include 
 
 ### Debian/Ubuntu
 ```bash
-wget https://github.com/dexter-xd/anvil/releases/download/beta_1.1.2/anvil_1.1.2_amd64.deb
-sudo dpkg -i anvil_1.1.2_amd64.deb
+wget https://github.com/dexter-xd/anvil/releases/download/beta_1.2.0/anvil_1.2.0_amd64.deb
+sudo dpkg -i anvil_1.2.0_amd64.deb
 ```
 
 ### From Source
@@ -50,6 +50,15 @@ cmake -DCMAKE_BUILD_TYPE=Release -DCOPY_TO_EXAMPLE=OFF ..
 
 ## 🚀 Quick Start
 
+### Create New Project
+```bash
+# Create a new project with template generator
+anvil -c
+
+# Follow the interactive prompts to set up your project structure
+```
+
+### Manual Setup
 ```bash
 # Check installation
 anvil -v
@@ -75,13 +84,14 @@ cd build && make run
 ## 🖥️ Usage
 
 ```bash
-anvil [-v|-w|-wr|-u] <buildfile>
+anvil [-v|-w|-wr|-u|-c] <buildfile>
 
   -v          Show version
   -w          Watch mode (auto-rebuild) (supported for both multiple targets and single target)
   -wr         Watch & run mode (only for single target)
   -u          Update to latest version
   -u <ver>    Update to specific version (e.g., anvil -u 1.1.0)
+  -c          Create new project template (interactive)
 ```
 
 ## ⚙️ Configuration
@@ -150,6 +160,28 @@ anvil -wr build.conf
 # Edit code, save, see results instantly!
 ```
 
+## 🎯 Project Template Generator
+
+Anvil includes an interactive project template generator to quickly scaffold new C projects:
+
+```bash
+anvil -c
+```
+
+The template generator will prompt you for:
+- **Project name**: Enter a custom name or use '.' for current directory
+- **Version**: Project version (default: 1.0.0)
+- **Source structure**: Whether to create `src/` folder
+- **Include structure**: Whether to create `include/` folder  
+- **Multi-target**: Whether the project needs multiple executables
+
+Features:
+- Creates appropriate directory structure
+- Generates hello world program with VERSION macro
+- Creates properly configured `build.conf`
+- Supports both single and multi-target configurations
+- Smart project naming (uses "project" as default if no name provided)
+
 ## 🔄 Auto-Update Feature
 
 Anvil includes a built-in updater that can download and install new versions automatically:
@@ -159,10 +191,10 @@ Anvil includes a built-in updater that can download and install new versions aut
 anvil -u
 
 # Update to specific version
-anvil -u 1.1.0
+anvil -u 1.2.0
 
 # Update to beta version
-anvil -u 1.1.1-beta
+anvil -u beta_1.2.0
 ```
 
 The updater:
