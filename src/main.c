@@ -43,6 +43,9 @@ void show_config_content(const char *filename) {
 
 void print_config(BuildConfig *cfg) {
     printf("Project: %s\n", cfg->project_name);
+    if(strlen(cfg->version) > 0) {
+        printf("Version: %s\n", cfg->version);
+    }
     printf("Target: %s\n", cfg->target_name);
     printf("Sources: %d files\n", cfg->source_count);
 
@@ -78,6 +81,7 @@ int main(int argc, char *argv[]) {
         printf("  -wr    Watch & Run mode (auto-rebuild and run on file changes)\n");
         printf("\nExample buildfile format:\n");
         printf("  project = MyProject\n");
+        printf("  version = 1.0.0\n");
         printf("  target = myapp\n");
         printf("  sources = src/*\n");
         printf("  includes = include\n");

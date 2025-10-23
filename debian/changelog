@@ -1,3 +1,13 @@
+anvil (1.1.1) unstable; urgency=medium
+
+  * Added version support in build.conf files
+  * Automatic VERSION macro definition for C code
+  * Version information in generated Makefiles
+  * Enhanced configuration parser for version field
+  * Updated examples with version usage
+
+ -- Dexter <dexter@example.com>  Thu, 23 Oct 2025 
+
 anvil (1.1.0) unstable; urgency=medium
 
   * Fixed multi-target watch mode support
@@ -6,7 +16,7 @@ anvil (1.1.0) unstable; urgency=medium
   * Added CMake build configuration options
   * Enhanced multi-target Makefile generation
 
- -- Dexter <dexter@example.com>  Mon, 21 Oct 2025 12:00:00 +0000
+ -- Dexter <dexter@example.com>  Mon, 21 Oct 2025 
 
 anvil (1.0.0) unstable; urgency=medium
 
@@ -19,4 +29,4 @@ anvil (1.0.0) unstable; urgency=medium
   * Cross-platform support (Linux, Windows, macOS)
   * Human-readable code comments throughout codebase
 
- -- Dexter <dexter@example.com>  Sun, 19 Oct 2025 12:00:00 +0000
+ -- Dexter <dexter@example.com>  Sun, 19 Oct 2025 

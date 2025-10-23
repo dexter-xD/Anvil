@@ -19,8 +19,8 @@ A simple, CMake-like build system for C projects written in C. Features include 
 
 ### Debian/Ubuntu
 ```bash
-wget https://github.com/dexter-xd/anvil/releases/download/beta_1.1.0/anvil_1.1.0_amd64.deb
-sudo dpkg -i anvil_1.1.0_amd64.deb
+wget https://github.com/dexter-xd/anvil/releases/download/beta_1.1.1/anvil_1.1.1_amd64.deb
+sudo dpkg -i anvil_1.1.1_amd64.deb
 ```
 
 ### From Source
@@ -57,6 +57,7 @@ anvil -v
 # Create build.conf
 cat > build.conf << EOF
 project = MyApp
+version = 1.0.0
 target = myapp
 sources = src/*
 includes = include
@@ -84,6 +85,7 @@ anvil [-v|-w|-wr] <buildfile>
 | Option | Description | Example |
 |--------|-------------|---------|
 | `project` | Project name | `project = MyApp` |
+| `version` | Project version | `version = 1.2.0` |
 | `target` | Executable name | `target = myapp` |
 | `sources` | Source files | `sources = src/* main.c` |
 | `includes` | Include dirs | `includes = include` |
@@ -94,6 +96,7 @@ anvil [-v|-w|-wr] <buildfile>
 ### Multi-Target Configuration
 ```conf
 project = WebApp
+version = 1.5.2
 includes = include
 cflags = -Wall -O2
 output_dir = bin
@@ -114,6 +117,21 @@ ldflags = -lncurses
 - `make server` - Build specific target
 - `make run-server` - Run specific target
 - `make clean` - Clean all targets
+
+## 🏷️ Version Support
+
+Anvil automatically defines a `VERSION` macro from your build.conf version field:
+
+```c
+#include <stdio.h>
+
+int main() {
+    printf("MyApp v%s\n", VERSION);  // Prints: MyApp v1.0.0
+    return 0;
+}
+```
+
+The version flows from `build.conf` → `Makefile` → compiled binary, similar to CMake's version handling.
 
 ## 💡 Development Workflow
 

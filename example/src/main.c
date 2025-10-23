@@ -3,7 +3,7 @@
 #include "calculator.h"
 
 int main() {
-    printf("=== Simple Calculator Demo ===\n");
+    printf("=== Simple Calculator Demo v%s ===\n", VERSION);
     
     double a = 10.5, b = 3.2;
     

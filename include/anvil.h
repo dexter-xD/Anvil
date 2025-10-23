@@ -28,6 +28,7 @@ typedef struct {
 
 typedef struct {
     char project_name[128];
+    char version[64];  // Project version from build.conf
     char target_name[128];  // Keep for backward compatibility
     char sources[MAX_SOURCES][128];  // Keep for backward compatibility
     int source_count;  // Keep for backward compatibility

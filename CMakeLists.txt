@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(Anvil VERSION 1.1.0 LANGUAGES C)
+project(Anvil VERSION 1.1.1 LANGUAGES C)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -42,7 +42,7 @@ if(NOT DEFINED PACKAGE_NAME)
     set(PACKAGE_NAME "anvil")
 endif()
 if(NOT DEFINED PACKAGE_VERSION)
-    set(PACKAGE_VERSION "1.1.0")
+    set(PACKAGE_VERSION "1.1.1")
 endif()
 
 set(CPACK_PACKAGE_NAME "${PACKAGE_NAME}")

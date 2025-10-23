@@ -8,7 +8,8 @@ int parse_buildfile(const char *filename, BuildConfig *cfg) {
     }
 
     memset(cfg, 0, sizeof(BuildConfig));
-    strcpy(cfg->output_dir, "."); 
+    strcpy(cfg->output_dir, ".");
+    strcpy(cfg->version, "1.0.0");  // Default version 
 
     char line[MAX_LINE];
     int in_target_block = 0;
@@ -76,6 +77,8 @@ int parse_buildfile(const char *filename, BuildConfig *cfg) {
         } else {
             if(strcmp(key, "project") == 0) {
                 strcpy(cfg->project_name, value);
+            } else if(strcmp(key, "version") == 0) {
+                strcpy(cfg->version, value);
             } else if(strcmp(key, "target") == 0) {
                 strcpy(cfg->target_name, value);
             } else if(strcmp(key, "sources") == 0) {

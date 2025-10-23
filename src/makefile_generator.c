@@ -7,9 +7,10 @@ void generate_makefile(BuildConfig *cfg) {
         return;
     }
 
-    fprintf(f, "# Generated Makefile for %s\n\n", cfg->project_name);
+    fprintf(f, "# Generated Makefile for %s v%s\n\n", cfg->project_name, cfg->version);
     fprintf(f, "CC = gcc\n");
     fprintf(f, "OBJ_DIR = obj\n");
+    fprintf(f, "VERSION = %s\n", cfg->version);
 
     int use_bin_dir = strcmp(cfg->output_dir, ".") != 0;
     if(use_bin_dir) {
@@ -17,7 +18,7 @@ void generate_makefile(BuildConfig *cfg) {
     }
     fprintf(f, "SRC_DIR = ..\n\n");
 
-    fprintf(f, "CFLAGS =");
+    fprintf(f, "CFLAGS = -DVERSION=\\\"$(VERSION)\\\"");
     for(int i = 0; i < cfg->cflag_count; i++)
         fprintf(f, " %s", cfg->cflags[i]);
 
