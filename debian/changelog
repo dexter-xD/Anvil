@@ -1,3 +1,14 @@
+anvil (1.1.2) unstable; urgency=medium
+
+  * Added built-in auto-updater functionality
+  * New -u flag to update to latest version
+  * Support for updating to specific versions with -u <version>
+  * GitHub API integration for release management
+  * Automatic .deb package download and installation
+  * CLI with update commands
+
+ -- Dexter <dexter@example.com>  Thu, 23 Oct 2025
+
 anvil (1.1.1) unstable; urgency=medium
 
   * Added version support in build.conf files

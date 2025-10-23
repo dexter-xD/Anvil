@@ -74,11 +74,13 @@ int main(int argc, char *argv[]) {
     char *config_file = NULL;
 
     if(argc < 2) {
-        printf("Usage: %s [-v|-w|-wr] <buildfile>\n", argv[0]);
+        printf("Usage: %s [-v|-w|-wr|-u] <buildfile>\n", argv[0]);
         printf("\nOptions:\n");
-        printf("  -v     Show version information\n");
-        printf("  -w     Watch mode (auto-rebuild on file changes)\n");
-        printf("  -wr    Watch & Run mode (auto-rebuild and run on file changes)\n");
+        printf("  -v          Show version information\n");
+        printf("  -w          Watch mode (auto-rebuild on file changes)\n");
+        printf("  -wr         Watch & Run mode (auto-rebuild and run on file changes)\n");
+        printf("  -u          Update to latest version\n");
+        printf("  -u <ver>    Update to specific version (e.g., -u 1.1.0)\n");
         printf("\nExample buildfile format:\n");
         printf("  project = MyProject\n");
         printf("  version = 1.0.0\n");
@@ -94,7 +96,19 @@ int main(int argc, char *argv[]) {
     for(int i = 1; i < argc; i++) {
         if(strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
             show_version();
-            return 0;  // just show version and exit
+            return 0;  
+        } else if(strcmp(argv[i], "-u") == 0 || strcmp(argv[i], "--update") == 0) {
+
+            if(i + 1 < argc && argv[i + 1][0] != '-') {
+
+                char *target_version = argv[i + 1];
+                printf(BRIGHT_CYAN "Updating to version %s..." RESET "\n", target_version);
+                return update_to_version(target_version) ? 0 : 1;
+            } else {
+
+                printf(BRIGHT_CYAN "Updating to latest version..." RESET "\n");
+                return update_to_latest() ? 0 : 1;
+            }
         } else if(strcmp(argv[i], "-w") == 0) {
             watch = 1;
         } else if(strcmp(argv[i], "-wr") == 0) {

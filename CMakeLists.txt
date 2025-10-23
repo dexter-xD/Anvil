@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(Anvil VERSION 1.1.1 LANGUAGES C)
+project(Anvil VERSION 1.1.2 LANGUAGES C)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -15,9 +15,20 @@ set(SOURCES
     src/makefile_generator.c
     src/string_utils.c
     src/watch_system.c
+    src/updater.c
 )
 
+# Find required packages
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(CURL REQUIRED libcurl)
+pkg_check_modules(JSON_C REQUIRED json-c)
+
 add_executable(anvil ${SOURCES})
+
+# Link libraries
+target_link_libraries(anvil ${CURL_LIBRARIES} ${JSON_C_LIBRARIES})
+target_include_directories(anvil PRIVATE ${CURL_INCLUDE_DIRS} ${JSON_C_INCLUDE_DIRS})
+target_compile_options(anvil PRIVATE ${CURL_CFLAGS_OTHER} ${JSON_C_CFLAGS_OTHER})
 
 # Optionally copy executable to example folder after successful build
 if(COPY_TO_EXAMPLE)
@@ -42,7 +53,7 @@ if(NOT DEFINED PACKAGE_NAME)
     set(PACKAGE_NAME "anvil")
 endif()
 if(NOT DEFINED PACKAGE_VERSION)
-    set(PACKAGE_VERSION "1.1.1")
+    set(PACKAGE_VERSION "1.1.2")
 endif()
 
 set(CPACK_PACKAGE_NAME "${PACKAGE_NAME}")
@@ -64,10 +75,25 @@ set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/dexter/anvil")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Dexter <dexter@example.com>")
 set(CPACK_DEBIAN_PACKAGE_SECTION "devel")
 set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "build-essential")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "build-essential, libcurl4, libjson-c5")
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
 
 # Package file name
 set(CPACK_PACKAGE_FILE_NAME "${PACKAGE_NAME}_${PACKAGE_VERSION}_amd64")
 
 include(CPack)
+
+# Enable testing
+enable_testing()
+
+# Add test executables
+add_executable(test_updater test/test_updater.c)
+target_link_libraries(test_updater ${CURL_LIBRARIES} ${JSON_C_LIBRARIES})
+target_include_directories(test_updater PRIVATE ${CURL_INCLUDE_DIRS} ${JSON_C_INCLUDE_DIRS})
+target_compile_options(test_updater PRIVATE ${CURL_CFLAGS_OTHER} ${JSON_C_CFLAGS_OTHER})
+
+add_executable(test_updater_offline test/test_updater_offline.c)
+
+# Add tests
+add_test(NAME updater_offline_test COMMAND test_updater_offline)
+add_test(NAME updater_online_test COMMAND test_updater)

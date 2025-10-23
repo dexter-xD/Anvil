@@ -4,7 +4,7 @@
 set -e
 
 # package configuration
-VERSION="1.1.1"
+VERSION="1.1.2"
 PACKAGE_NAME="anvil"
 PACKAGE_FILE="${PACKAGE_NAME}_${VERSION}_amd64.deb"
 

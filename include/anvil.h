@@ -28,18 +28,18 @@ typedef struct {
 
 typedef struct {
     char project_name[128];
-    char version[64];  // Project version from build.conf
-    char target_name[128];  // Keep for backward compatibility
-    char sources[MAX_SOURCES][128];  // Keep for backward compatibility
-    int source_count;  // Keep for backward compatibility
-    Target targets[16];  // Support up to 16 targets
+    char version[64];  
+    char target_name[128];  
+    char sources[MAX_SOURCES][128];  
+    int source_count;  
+    Target targets[16];  
     int target_count;
     char includes[MAX_INCLUDES][128];
     int include_count;
     char cflags[MAX_FLAGS][128];
     int cflag_count;
-    char ldflags[MAX_FLAGS][128];  // Keep for backward compatibility
-    int ldflag_count;  // Keep for backward compatibility
+    char ldflags[MAX_FLAGS][128];  
+    int ldflag_count;  
     char output_dir[128];
 } BuildConfig;
 
@@ -73,5 +73,9 @@ int check_for_changes(WatchFile *watch_files, int watch_count);
 void print_timestamp(void);
 int run_make(int run_after_build);
 void watch_mode(BuildConfig *cfg, int run_after_build);
+
+/* updater system */
+int update_to_latest(void);
+int update_to_version(const char *target_version);
 
 #endif

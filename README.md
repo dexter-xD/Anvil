@@ -9,7 +9,7 @@
 ![C](https://img.shields.io/badge/C-99-blue)
 ![Platform](https://img.shields.io/badge/Platform-Linux-green)
 
-A simple, CMake-like build system for C projects written in C. Features include live file watching with auto-rebuild (nodemon-style), wildcard source matching, custom include/output directories, and out-of-source builds. Generates readable Makefiles with zero dependencies.
+A simple, CMake-like build system for C projects written in C. Features include live file watching with auto-rebuild (nodemon-style), wildcard source matching, custom include/output directories, out-of-source builds, and built-in auto-updater. Generates readable Makefiles with zero dependencies.
 
 > **⚠️ IMPORTANT:** This project is in early stage development and may contain bugs. Use with caution in production environments.
 
@@ -19,8 +19,8 @@ A simple, CMake-like build system for C projects written in C. Features include 
 
 ### Debian/Ubuntu
 ```bash
-wget https://github.com/dexter-xd/anvil/releases/download/beta_1.1.1/anvil_1.1.1_amd64.deb
-sudo dpkg -i anvil_1.1.1_amd64.deb
+wget https://github.com/dexter-xd/anvil/releases/download/beta_1.1.2/anvil_1.1.2_amd64.deb
+sudo dpkg -i anvil_1.1.2_amd64.deb
 ```
 
 ### From Source
@@ -54,6 +54,9 @@ cmake -DCMAKE_BUILD_TYPE=Release -DCOPY_TO_EXAMPLE=OFF ..
 # Check installation
 anvil -v
 
+# Update to latest version (if needed)
+anvil -u
+
 # Create build.conf
 cat > build.conf << EOF
 project = MyApp
@@ -72,11 +75,13 @@ cd build && make run
 ## 🖥️ Usage
 
 ```bash
-anvil [-v|-w|-wr] <buildfile>
+anvil [-v|-w|-wr|-u] <buildfile>
 
-  -v     Show version
-  -w     Watch mode (auto-rebuild) (supported for both multiple targets and single target)
-  -wr    Watch & run mode (only for single target)
+  -v          Show version
+  -w          Watch mode (auto-rebuild) (supported for both multiple targets and single target)
+  -wr         Watch & run mode (only for single target)
+  -u          Update to latest version
+  -u <ver>    Update to specific version (e.g., anvil -u 1.1.0)
 ```
 
 ## ⚙️ Configuration
@@ -144,6 +149,27 @@ anvil -wr build.conf
 
 # Edit code, save, see results instantly!
 ```
+
+## 🔄 Auto-Update Feature
+
+Anvil includes a built-in updater that can download and install new versions automatically:
+
+```bash
+# Update to latest version
+anvil -u
+
+# Update to specific version
+anvil -u 1.1.0
+
+# Update to beta version
+anvil -u 1.1.1-beta
+```
+
+The updater:
+- Fetches releases from GitHub
+- Downloads the appropriate .deb package
+- Installs using `sudo dpkg -i`
+- Works with both stable and beta releases
 
 ## 📁 Example Structure
 
