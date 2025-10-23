@@ -7,6 +7,9 @@ on:
       - '[0-9]+.[0-9]+.[0-9]+'
       - 'v[0-9]+.[0-9]+.[0-9]+'
 
+permissions:
+  contents: write
+  
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
@@ -62,24 +65,28 @@ jobs:
         VERSION="${{ steps.version.outputs.version }}"
         
         # Extract changelog entry for this version
-        awk -v version="$VERSION" '
-        BEGIN { found=0; content="" }
-        /^anvil \([^)]+\)/ {
-          if (found) exit
-          if ($0 ~ "anvil \\(" version "\\)") {
-            found=1
-            next
+        if grep -q "anvil ($VERSION)" debian/changelog; then
+          awk -v version="$VERSION" '
+          BEGIN { found=0; content="" }
+          /^anvil \([^)]+\)/ {
+            if (found) exit
+            if ($0 ~ "anvil \\(" version "\\)") {
+              found=1
+              next
+            }
           }
-        }
-        found && /^anvil \([^)]+\)/ { exit }
-        found && /^  \*/ { 
-          gsub(/^  \* /, "- ")
-          content = content $0 "\n"
-        }
-        END { 
-          if (content == "") content = "- Release version " version
-          print content 
-        }' debian/changelog > changelog_entry.txt
+          found && /^anvil \([^)]+\)/ { exit }
+          found && /^  \*/ { 
+            gsub(/^  \* /, "- ")
+            content = content $0 "\n"
+          }
+          END { 
+            if (content == "") content = "- Release version " version "\n"
+            print content 
+          }' debian/changelog > changelog_entry.txt
+        else
+          echo "- Release version $VERSION" > changelog_entry.txt
+        fi
         
         echo "Extracted changelog:"
         cat changelog_entry.txt
@@ -96,7 +103,14 @@ jobs:
           TITLE="# <img src=\"https://res.cloudinary.com/sohambasak/image/upload/v1760796510/ugn1c4ief9wq1dkh4bm4.png\" alt=\"Logo\" width=\"34\" align=\"left\"/> Anvil v${VERSION}"
         fi
         
-        echo "title=$TITLE" >> $GITHUB_OUTPUT
+        # Use a simpler title for the release name
+        if [ "$IS_BETA" = "true" ]; then
+          RELEASE_TITLE="Anvil v${VERSION} Beta"
+        else
+          RELEASE_TITLE="Anvil v${VERSION}"
+        fi
+        
+        echo "title=$RELEASE_TITLE" >> $GITHUB_OUTPUT
         
         # Create release body with changelog
         {
@@ -137,7 +151,7 @@ jobs:
         echo "Found .deb file: $DEB_FILE"
     
     - name: Create GitHub Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         tag_name: ${{ steps.version.outputs.tag_name }}
         name: ${{ steps.version.outputs.title }}
@@ -145,8 +159,7 @@ jobs:
         files: ${{ steps.find_deb.outputs.deb_file }}
         prerelease: ${{ steps.version.outputs.is_beta }}
         draft: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
