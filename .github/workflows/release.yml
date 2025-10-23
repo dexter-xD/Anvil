@@ -1,0 +1,157 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'beta_*'
+      - '[0-9]+.[0-9]+.[0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Extract version from tag
+      id: version
+      run: |
+        TAG_NAME=${GITHUB_REF#refs/tags/}
+        echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+        
+        # Extract version number from different tag formats
+        if [[ $TAG_NAME =~ ^beta_(.+)$ ]]; then
+          VERSION=${BASH_REMATCH[1]}
+          IS_BETA=true
+        elif [[ $TAG_NAME =~ ^v?(.+)$ ]]; then
+          VERSION=${BASH_REMATCH[1]}
+          IS_BETA=false
+        fi
+        
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "is_beta=$IS_BETA" >> $GITHUB_OUTPUT
+        echo "Extracted version: $VERSION"
+        echo "Is beta: $IS_BETA"
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential cmake
+    
+    - name: Update build script version
+      run: |
+        sed -i 's/VERSION="[^"]*"/VERSION="${{ steps.version.outputs.version }}"/' build-package.sh
+        echo "Updated build-package.sh with version ${{ steps.version.outputs.version }}"
+    
+    - name: Update CMakeLists.txt version
+      run: |
+        sed -i 's/project(Anvil VERSION [0-9.]*/project(Anvil VERSION ${{ steps.version.outputs.version }}/' CMakeLists.txt
+        sed -i 's/set(PACKAGE_VERSION "[^"]*")/set(PACKAGE_VERSION "${{ steps.version.outputs.version }}")/' CMakeLists.txt
+        echo "Updated CMakeLists.txt with version ${{ steps.version.outputs.version }}"
+    
+    - name: Run build script
+      run: |
+        chmod +x build-package.sh
+        ./build-package.sh
+    
+    - name: Extract changelog for version
+      id: changelog
+      run: |
+        VERSION="${{ steps.version.outputs.version }}"
+        
+        # Extract changelog entry for this version
+        awk -v version="$VERSION" '
+        BEGIN { found=0; content="" }
+        /^anvil \([^)]+\)/ {
+          if (found) exit
+          if ($0 ~ "anvil \\(" version "\\)") {
+            found=1
+            next
+          }
+        }
+        found && /^anvil \([^)]+\)/ { exit }
+        found && /^  \*/ { 
+          gsub(/^  \* /, "- ")
+          content = content $0 "\n"
+        }
+        END { 
+          if (content == "") content = "- Release version " version
+          print content 
+        }' debian/changelog > changelog_entry.txt
+        
+        echo "Extracted changelog:"
+        cat changelog_entry.txt
+    
+    - name: Create release title and body
+      id: release_info
+      run: |
+        VERSION="${{ steps.version.outputs.version }}"
+        IS_BETA="${{ steps.version.outputs.is_beta }}"
+        
+        if [ "$IS_BETA" = "true" ]; then
+          TITLE="# <img src=\"https://res.cloudinary.com/sohambasak/image/upload/v1760796510/ugn1c4ief9wq1dkh4bm4.png\" alt=\"Logo\" width=\"34\" align=\"left\"/> Anvil v${VERSION} Beta"
+        else
+          TITLE="# <img src=\"https://res.cloudinary.com/sohambasak/image/upload/v1760796510/ugn1c4ief9wq1dkh4bm4.png\" alt=\"Logo\" width=\"34\" align=\"left\"/> Anvil v${VERSION}"
+        fi
+        
+        echo "title=$TITLE" >> $GITHUB_OUTPUT
+        
+        # Create release body with changelog
+        {
+          echo "$TITLE"
+          echo ""
+          echo "## What's Changed"
+          cat changelog_entry.txt
+          echo ""
+          echo "## Installation"
+          echo ""
+          echo "### Debian/Ubuntu"
+          echo '```bash'
+          echo "wget https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.tag_name }}/anvil_${VERSION}_amd64.deb"
+          echo "sudo dpkg -i anvil_${VERSION}_amd64.deb"
+          echo '```'
+          echo ""
+          echo "### From Source"
+          echo '```bash'
+          echo "git clone https://github.com/${{ github.repository }}.git"
+          echo "cd anvil && mkdir build && cd build"
+          echo "cmake -DCMAKE_BUILD_TYPE=Release -DCOPY_TO_EXAMPLE=OFF .."
+          echo "make && sudo make install"
+          echo '```'
+        } > release_body.md
+        
+        echo "Release body created:"
+        cat release_body.md
+    
+    - name: Find .deb file
+      id: find_deb
+      run: |
+        DEB_FILE=$(find . -name "anvil_*.deb" -type f | head -1)
+        if [ -z "$DEB_FILE" ]; then
+          echo "Error: No .deb file found"
+          exit 1
+        fi
+        echo "deb_file=$DEB_FILE" >> $GITHUB_OUTPUT
+        echo "Found .deb file: $DEB_FILE"
+    
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ steps.version.outputs.tag_name }}
+        name: ${{ steps.version.outputs.title }}
+        body_path: release_body.md
+        files: ${{ steps.find_deb.outputs.deb_file }}
+        prerelease: ${{ steps.version.outputs.is_beta }}
+        draft: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: anvil-${{ steps.version.outputs.version }}
+        path: |
+          anvil_*.deb
+          build/Makefile
