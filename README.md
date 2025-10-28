@@ -2,8 +2,6 @@
 
 # Anvil - Minimal C Build System
 
-<img src="https://res.cloudinary.com/sohambasak/image/upload/v1760796510/ugn1c4ief9wq1dkh4bm4.png" alt="Anvil Logo" width="300"/>
-
 ![Status](https://img.shields.io/badge/Status-Beta-orange)
 ![License](https://img.shields.io/badge/License-MIT-blue)
 ![C](https://img.shields.io/badge/C-99-blue)
